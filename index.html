@@ -806,3 +806,60 @@
             container.innerHTML = club.committee.map(m => `
                 <div class="committee-item">
                     <strong>${m.position}</strong><br>
+                    ${m.name}<br>
+                    <small>📧 ${m.contact}</small>
+                </div>
+            `).join('') || '<p>No committee members added yet.</p>';
+        }
+
+        function addClubEvent() {
+            const club = clubs.find(c => c.id === currentClubId);
+            const event = {
+                id: nextId++,
+                name: document.getElementById('ceName').value,
+                date: document.getElementById('ceDate').value,
+                venue: document.getElementById('ceVenue').value,
+                capacity: document.getElementById('ceCapacity').value,
+                clubName: club.name
+            };
+
+            if (!event.name || !event.date) return;
+
+            club.events.push(event);
+            displayClubEvents(club);
+            displayClubs();
+            
+            document.getElementById('ceName').value = '';
+            document.getElementById('ceDate').value = '';
+            document.getElementById('ceVenue').value = '';
+            document.getElementById('ceCapacity').value = '';
+        }
+
+        function displayClubEvents(club) {
+            const container = document.getElementById('clubEventsList');
+            container.innerHTML = club.events.map(e => `
+                <div class="event-card">
+                    <h3>${e.name}</h3>
+                    <div class="event-detail"><strong>📅 Date:</strong> ${e.date}</div>
+                    <div class="event-detail"><strong>📍 Venue:</strong> ${e.venue}</div>
+                    <div class="event-detail"><strong>👥 Capacity:</strong> ${e.capacity}</div>
+                    <div class="event-detail"><strong>🏛️ Club:</strong> ${e.clubName}</div>
+                </div>
+            `).join('') || '<p>No events scheduled yet.</p>';
+        }
+
+        function clearForm(prefix) {
+            const inputs = document.querySelectorAll(`input[id^="${prefix}"]`);
+            inputs.forEach(input => input.value = '');
+        }
+
+        window.onload = function() {
+            displayHackathons();
+            displayFests();
+            displaySeminars();
+            displaySports();
+            displayClubs();
+        };
+    </script>
+</body>
+</html>
